@@ -85,7 +85,7 @@ pub fn run(main_wnd: Window, game_wnd: Window, game_area: Rect, screen_area: Rec
     main_wnd.refresh();
     game_wnd.refresh();
 
-    let story_text = vec![
+    let story_text = [
         "Just another Monday, and you're on your way to work...",
         "When suddenly...",
         "You realise you left the oven on!",
@@ -179,7 +179,7 @@ pub fn run(main_wnd: Window, game_wnd: Window, game_area: Rect, screen_area: Rec
             game_over = true;
         }
 
-        stars.get_data().into_iter().for_each(|star| {
+        stars.get_data().iter_mut().for_each(|star| {
             game_wnd.mvaddch(star.get_pos().1, star.get_pos().0, '.');
         });
 
@@ -192,13 +192,8 @@ pub fn run(main_wnd: Window, game_wnd: Window, game_area: Rect, screen_area: Rec
         game_wnd.mvaddch(player.pos.1, player.pos.0 - 1, ACS_LARROW());
         game_wnd.mvaddch(player.pos.1, player.pos.0 + 1, ACS_RARROW());
 
-        if (tick / 5) % 3 == 1 {
-            let color;
-            if tick % 2 == 0 {
-                color = 3;
-            } else {
-                color = 4;
-            }
+        if (tick / 5) % 3 == 0 {
+            let color = if tick % 2 == 0 { 3 } else { 4 };
             game_wnd.attron(COLOR_PAIR(color));
             game_wnd.mvaddch(player.pos.1 + 1, player.pos.0, ACS_UARROW());
             game_wnd.attroff(COLOR_PAIR(color));
@@ -207,7 +202,7 @@ pub fn run(main_wnd: Window, game_wnd: Window, game_area: Rect, screen_area: Rec
         game_wnd.attroff(A_ALTCHARSET);
 
         game_wnd.attron(A_BOLD);
-        asteroids.get_data().into_iter().for_each(|asteroid| {
+        asteroids.get_data().iter_mut().for_each(|asteroid| {
             game_wnd.mvaddch(asteroid.get_pos().1, asteroid.get_pos().0, '*');
         });
         game_wnd.attroff(A_BOLD);
