@@ -210,8 +210,8 @@ pub fn run(main_wnd: Window, game_wnd: Window, game_area: Rect, screen_area: Rec
         main_wnd.mv(20, 1);
         main_wnd.hline(' ', 25);
         main_wnd.mv(20, 1);
-        draw_energy_bar(player.energy, &main_wnd);
 
+        draw_energy_bar(player.energy, &main_wnd);
         main_wnd.mvprintw(21, 1, " - E N E R G Y -      //");
 
         main_wnd.attron(A_BOLD);
@@ -279,22 +279,31 @@ pub fn close() {
     endwin();
 }
 
-fn draw_energy_bar(a: i32, main_wnd: &Window) {
-    let mut col_pair;
-    for i in (0..a).step_by(4) {
-        if i > 100 {
-            col_pair = 5;
-        } else if i > 50 {
-            col_pair = 2;
-        } else if i > 25 {
-            col_pair = 3;
-        } else {
-            col_pair = 4;
-        }
-        main_wnd.attron(COLOR_PAIR(col_pair));
-        main_wnd.attron(A_BOLD);
-        main_wnd.addch('/');
-        main_wnd.attroff(A_BOLD);
-        main_wnd.attroff(COLOR_PAIR(col_pair));
+fn draw_energy_bar(x: i32, main_wnd: &Window) {
+    draw_energy_recursive(0, x, main_wnd);
+}
+
+fn draw_energy_recursive(i: i32, x: i32, main_wnd: &Window) {
+    if i >= x {
+        return;
+    }
+    draw_energy(i, main_wnd);
+    draw_energy_recursive(i + 4, x, main_wnd);
+}
+
+fn draw_energy(i: i32, main_wnd: &Window) {
+    let col_pair = get_energy_color(i);
+    main_wnd.attron(COLOR_PAIR(col_pair));
+    main_wnd.attron(A_BOLD);
+    main_wnd.addch('/');
+    main_wnd.attroff(A_BOLD);
+    main_wnd.attroff(COLOR_PAIR(col_pair));
+}
+
+fn get_energy_color(i: i32) -> u32 {
+    match i {
+        0..25 => 4,
+        25..50 => 3,
+        _ => 2,
     }
 }
