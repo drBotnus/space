@@ -65,7 +65,7 @@ pub fn init() -> (Window, Window, Rect, Rect) {
     (main_wnd, game_wnd, game_area, screen_area)
 }
 
-pub fn run(main_wnd: Window, game_wnd: Window, game_area: Rect, screen_area: Rect) {
+pub fn run((main_wnd, game_wnd, game_area, screen_area): (Window, Window, Rect, Rect)) {
     let mut tick: i32;
     let mut player = Player::default();
     let mut stars: ObjectField = ObjectField::new(game_area, vec![]);
